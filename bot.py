@@ -430,14 +430,4 @@ async def clear_cache(client, update):
 
 if __name__ == "__main__":
     logging.info("🚀 ربات با بالاترین کارایی و پنل‌های شیشه‌ای دوگانه روشن شد!")
-    
-    # اصلاحیه مدیریت حلقه رویداد برای سرورهای ابری
-    try:
-        loop = asyncio.get_event_loop()
-        if loop.is_closed():
-            raise RuntimeError
-    except RuntimeError:
-        loop = asyncio.new_event_loop()
-        asyncio.set_event_loop(loop)
-        
     app.run()
