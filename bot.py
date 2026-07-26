@@ -210,7 +210,6 @@ async def handle_callbacks(client, callback_query: CallbackQuery):
         await callback_query.message.edit_reply_markup(reply_markup=get_settings_keyboard(int(c_id)))
         await callback_query.answer(f"وضعیت قفل {lock_type} تغییر کرد.")
 
-# --- دستورات پی‌وی ---
 @app.on_message(filters.command("start") & filters.private)
 async def private_start(client, message: Message):
     await message.reply_text(
@@ -220,7 +219,6 @@ async def private_start(client, message: Message):
         reply_markup=get_private_start_keyboard()
     )
 
-# --- دستورات ادمین ارشد ---
 @app.on_message(filters.command("sudo") & filters.user(ADMIN_ID))
 async def sudo_panel(client, message: Message):
     await message.reply_text(
@@ -304,7 +302,6 @@ async def forward_broadcast(client, message: Message):
 
     await status_msg.edit_text(f"✅ فوروارد همگانی به `{sent}` گروه انجام شد.")
 
-# --- دستورات مدیریتی گروه ---
 @app.on_message(filters.command("settings") & filters.group)
 async def show_group_settings(client, message: Message):
     if not await is_admin(client, message.chat.id, message.from_user.id): return
@@ -351,7 +348,6 @@ async def pin_message(client, message: Message):
     except Exception as e:
         await message.reply_text(f"❌ خطا: {e}")
 
-# --- مانیتورینگ و آنتی اسپم هوشمند ---
 @app.on_message(filters.new_chat_members)
 async def welcome_new_member(client, message: Message):
     register_chat(message.chat.id, message.chat.title)
@@ -434,4 +430,14 @@ async def clear_cache(client, update):
 
 if __name__ == "__main__":
     logging.info("🚀 ربات با بالاترین کارایی و پنل‌های شیشه‌ای دوگانه روشن شد!")
+    
+    # اصلاحیه مدیریت حلقه رویداد برای سرورهای ابری
+    try:
+        loop = asyncio.get_event_loop()
+        if loop.is_closed():
+            raise RuntimeError
+    except RuntimeError:
+        loop = asyncio.new_event_loop()
+        asyncio.set_event_loop(loop)
+        
     app.run()
