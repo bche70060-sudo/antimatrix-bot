@@ -261,5 +261,12 @@ async def core_monitor(client, message: Message):
         except Exception: pass
 
 if __name__ == "__main__":
-    logging.info("🚀 ربات با موفقیت روشن شد!")
-    app.run()
+    import asyncio
+    try:
+        loop = asyncio.get_event_loop()
+        if loop.is_running():
+            app.run()
+        else:
+            loop.run_until_complete(app.start())
+    except RuntimeError:
+        app.run()
